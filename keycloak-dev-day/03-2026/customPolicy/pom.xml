@@ -1,0 +1,153 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.example</groupId>
+  <artifactId>CustomPolicy</artifactId>
+  <version>1.0-SNAPSHOT</version>
+  <name>Archetype - CustomPolicy</name>
+  <url>http://maven.apache.org</url>
+
+  <properties>
+    <revision>3.2.0-SNAPSHOT</revision>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.source>21</maven.compiler.source>
+    <maven.compiler.target>21</maven.compiler.target>
+    <maven.compiler.release>21</maven.compiler.release>
+
+
+    <version.intension-common>2.8.0</version.intension-common>
+    <!-- NEVER, I repeat: NEVER changes this pattern, as this will break the CI    -->
+    <version.keycloak>26.2.5</version.keycloak>
+    <version.lombok>1.18.38</version.lombok>
+    <version.maven.properties>1.2.1</version.maven.properties>
+    <version.maven.compiler>3.14.0</version.maven.compiler>
+    <version.maven.surefire>3.5.3</version.maven.surefire>
+    <version.maven.shade>3.6.0</version.maven.shade>
+    <version.maven.failsafe>3.5.3</version.maven.failsafe>
+    <version.maven.resources>3.3.1</version.maven.resources>
+    <version.auto-service>1.1.1</version.auto-service>
+  </properties>
+
+
+  <dependencies>
+    <dependency>
+      <groupId>org.keycloak</groupId>
+      <artifactId>keycloak-server-spi</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.keycloak</groupId>
+      <artifactId>keycloak-server-spi-private</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>org.keycloak</groupId>
+        <artifactId>keycloak-authz-policy-common</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.keycloak</groupId>
+      <artifactId>keycloak-services</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.keycloak</groupId>
+      <artifactId>keycloak-themes</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>com.google.auto.service</groupId>
+      <artifactId>auto-service</artifactId>
+      <version>${version.auto-service}</version>
+      <optional>true</optional>
+      <scope>provided</scope>
+    </dependency>
+
+  </dependencies>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.keycloak</groupId>
+        <artifactId>keycloak-core</artifactId>
+        <version>${version.keycloak}</version>
+        <scope>provided</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.keycloak</groupId>
+        <artifactId>keycloak-server-spi</artifactId>
+        <version>${version.keycloak}</version>
+        <scope>provided</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.keycloak</groupId>
+        <artifactId>keycloak-server-spi-private</artifactId>
+        <version>${version.keycloak}</version>
+        <scope>provided</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.keycloak</groupId>
+        <artifactId>keycloak-services</artifactId>
+        <version>${version.keycloak}</version>
+        <scope>provided</scope>
+        <exclusions>
+          <!-- Has  to be excluded. If this is not here, Logging does not work for Testcontainers.
+          Normally no package should provide an implementation for slf4j. But Keycloak does, starting from version 26. Might be a bug. -->
+          <exclusion>
+            <groupId>org.jboss.slf4j</groupId>
+            <artifactId>slf4j-jboss-logmanager</artifactId>
+          </exclusion>
+        </exclusions>
+      </dependency>
+      <dependency>
+        <groupId>org.keycloak</groupId>
+        <artifactId>keycloak-themes</artifactId>
+        <version>${version.keycloak}</version>
+        <scope>provided</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.keycloak</groupId>
+        <artifactId>keycloak-saml-core</artifactId>
+        <version>${version.keycloak}</version>
+        <scope>provided</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.keycloak</groupId>
+        <artifactId>keycloak-saml-core-public</artifactId>
+        <version>${version.keycloak}</version>
+        <scope>provided</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.keycloak</groupId>
+        <artifactId>keycloak-model-jpa</artifactId>
+        <version>${version.keycloak}</version>
+        <scope>provided</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.keycloak</groupId>
+        <artifactId>keycloak-authz-policy-common</artifactId>
+        <version>${version.keycloak}</version>
+        <scope>provided</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.projectlombok</groupId>
+        <artifactId>lombok</artifactId>
+        <version>${version.lombok}</version>
+        <scope>provided</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <build>
+    <sourceDirectory>src/main/java</sourceDirectory>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>3.12.1</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
+</project>
