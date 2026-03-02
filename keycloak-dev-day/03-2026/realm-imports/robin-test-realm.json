@@ -438,6 +438,9 @@
     "lastName" : "Support",
     "email" : "adelheit@support.de",
     "emailVerified" : true,
+    "attributes" : {
+      "allow-impersonation-by" : [ "sophie@support.de;2026-03-01;2026-03-07" ]
+    },
     "enabled" : true,
     "createdTimestamp" : 1772183605399,
     "totp" : false,
@@ -578,6 +581,29 @@
     "realmRoles" : [ "default-roles-robin-test" ],
     "notBefore" : 0,
     "groups" : [ "/Atlassian-Admin-Team" ]
+  }, {
+    "id" : "278fbd99-e68b-4796-ac6e-bd4c0896e2c7",
+    "username" : "sophie@support.de",
+    "firstName" : "Sophie",
+    "lastName" : "Support",
+    "email" : "sophie@support.de",
+    "emailVerified" : true,
+    "enabled" : true,
+    "createdTimestamp" : 1772460412633,
+    "totp" : false,
+    "credentials" : [ {
+      "id" : "915028d3-5ebd-4a1d-a0c2-dd00267d2d5c",
+      "type" : "password",
+      "userLabel" : "123",
+      "createdDate" : 1772460418690,
+      "secretData" : "{\"value\":\"dP097j/il9d89gkg+l/BNol3H8gHWXp2Y1yAJb7s13o=\",\"salt\":\"t/WdeqMyjo6zNY9FttxZqA==\",\"additionalParameters\":{}}",
+      "credentialData" : "{\"hashIterations\":5,\"algorithm\":\"argon2\",\"additionalParameters\":{\"hashLength\":[\"32\"],\"memory\":[\"7168\"],\"type\":[\"id\"],\"version\":[\"1.3\"],\"parallelism\":[\"1\"]}}"
+    } ],
+    "disableableCredentialTypes" : [ ],
+    "requiredActions" : [ ],
+    "realmRoles" : [ "default-roles-robin-test" ],
+    "notBefore" : 0,
+    "groups" : [ "/Support-Team" ]
   } ],
   "scopeMappings" : [ {
     "clientScope" : "offline_access",
@@ -870,22 +896,22 @@
           "name" : "impersonate-members"
         } ]
       }, {
-        "name" : "ad0c941d-460d-46f6-8ad7-5db73910a269",
+        "name" : "16ea5c5c-6d0a-4dbf-9f8e-1d45cad0ef82",
         "ownerManagedAccess" : false,
         "attributes" : { },
         "uris" : [ ],
         "scopes" : [ {
-          "name" : "manage-group-membership"
+          "name" : "manage-members"
         }, {
           "name" : "view"
         }, {
-          "name" : "impersonate"
+          "name" : "manage-membership"
         }, {
-          "name" : "map-roles"
-        }, {
-          "name" : "reset-password"
+          "name" : "view-members"
         }, {
           "name" : "manage"
+        }, {
+          "name" : "impersonate-members"
         } ]
       } ],
       "policies" : [ {
@@ -919,15 +945,6 @@
           "groupsClaim" : ""
         }
       }, {
-        "name" : "mia",
-        "description" : "",
-        "type" : "user",
-        "logic" : "POSITIVE",
-        "decisionStrategy" : "UNANIMOUS",
-        "config" : {
-          "users" : "[\"mia@customer.de\"]"
-        }
-      }, {
         "name" : "CW10",
         "description" : "",
         "type" : "time",
@@ -935,16 +952,36 @@
         "decisionStrategy" : "UNANIMOUS",
         "config" : {
           "noa" : "2026-03-09 00:00:00",
-          "nbf" : "2026-03-01 00:00:00"
+          "nbf" : "2026-03-02 00:00:00"
         }
       }, {
         "name" : "aggregated",
         "description" : "",
         "type" : "aggregate",
         "logic" : "POSITIVE",
-        "decisionStrategy" : "AFFIRMATIVE",
+        "decisionStrategy" : "UNANIMOUS",
         "config" : {
-          "applyPolicies" : "[\"mia\",\"CW10\"]"
+          "applyPolicies" : "[\"sophie\",\"CW10\"]"
+        }
+      }, {
+        "name" : "sophie",
+        "description" : "",
+        "type" : "user",
+        "logic" : "POSITIVE",
+        "decisionStrategy" : "UNANIMOUS",
+        "config" : {
+          "users" : "[\"sophie@support.de\"]"
+        }
+      }, {
+        "name" : "Custom Regex Policy",
+        "description" : "",
+        "type" : "regex",
+        "logic" : "POSITIVE",
+        "decisionStrategy" : "UNANIMOUS",
+        "config" : {
+          "targetContextAttributes" : "false",
+          "pattern" : "s",
+          "targetClaim" : "s"
         }
       }, {
         "name" : "atlassian",
@@ -983,16 +1020,28 @@
           "applyPolicies" : "[\"support-team\"]"
         }
       }, {
-        "name" : "hannah",
+        "name" : "vacation",
         "description" : "",
         "type" : "scope",
         "logic" : "POSITIVE",
         "decisionStrategy" : "UNANIMOUS",
         "config" : {
           "defaultResourceType" : "Users",
-          "resources" : "[\"ad0c941d-460d-46f6-8ad7-5db73910a269\"]",
-          "scopes" : "[\"manage\",\"view\",\"impersonate\"]",
-          "applyPolicies" : "[\"mia\",\"CW10\"]"
+          "resources" : "[\"Users\"]",
+          "scopes" : "[\"view\",\"impersonate\"]",
+          "applyPolicies" : "[\"Custom Regex Policy\"]"
+        }
+      }, {
+        "name" : "support",
+        "description" : "",
+        "type" : "scope",
+        "logic" : "POSITIVE",
+        "decisionStrategy" : "UNANIMOUS",
+        "config" : {
+          "defaultResourceType" : "Groups",
+          "resources" : "[\"16ea5c5c-6d0a-4dbf-9f8e-1d45cad0ef82\"]",
+          "scopes" : "[\"view-members\"]",
+          "applyPolicies" : "[\"support-team\"]"
         }
       } ],
       "scopes" : [ {
@@ -1031,28 +1080,28 @@
         "resourceTypes" : {
           "Groups" : {
             "type" : "Groups",
-            "scopes" : [ "view", "manage-membership", "manage-members", "view-members", "impersonate-members", "manage" ],
-            "scopeAliases" : { }
-          },
-          "Roles" : {
-            "type" : "Roles",
-            "scopes" : [ "map-role", "map-role-client-scope", "map-role-composite" ],
-            "scopeAliases" : { }
-          },
-          "Clients" : {
-            "type" : "Clients",
-            "scopes" : [ "map-roles", "map-roles-client-scope", "view", "map-roles-composite", "manage" ],
+            "scopes" : [ "manage-membership", "view", "manage", "impersonate-members", "view-members", "manage-members" ],
             "scopeAliases" : { }
           },
           "Users" : {
             "type" : "Users",
-            "scopes" : [ "reset-password", "view", "impersonate", "map-roles", "manage", "manage-group-membership" ],
+            "scopes" : [ "view", "reset-password", "manage-group-membership", "manage", "map-roles", "impersonate" ],
             "scopeAliases" : {
-              "impersonate" : [ "impersonate-members" ],
+              "manage" : [ "manage-members" ],
               "view" : [ "view-members" ],
-              "manage" : [ "manage-members" ]
+              "impersonate" : [ "impersonate-members" ]
             },
             "groupType" : "Groups"
+          },
+          "Clients" : {
+            "type" : "Clients",
+            "scopes" : [ "view", "map-roles-client-scope", "map-roles", "manage", "map-roles-composite" ],
+            "scopeAliases" : { }
+          },
+          "Roles" : {
+            "type" : "Roles",
+            "scopes" : [ "map-role-composite", "map-role-client-scope", "map-role" ],
+            "scopeAliases" : { }
           }
         }
       }
@@ -2057,6 +2106,14 @@
       "subComponents" : { },
       "config" : {
         "allow-default-scopes" : [ "true" ]
+      }
+    } ],
+    "org.keycloak.userprofile.UserProfileProvider" : [ {
+      "id" : "b8f67505-1bd2-47d0-967f-800a221c23ac",
+      "providerId" : "declarative-user-profile",
+      "subComponents" : { },
+      "config" : {
+        "kc.user.profile.config" : [ "{\"attributes\":[{\"name\":\"username\",\"displayName\":\"${username}\",\"validations\":{\"length\":{\"min\":3,\"max\":255},\"username-prohibited-characters\":{},\"up-username-not-idn-homograph\":{}},\"permissions\":{\"view\":[\"admin\",\"user\"],\"edit\":[\"admin\",\"user\"]},\"multivalued\":false},{\"name\":\"email\",\"displayName\":\"${email}\",\"validations\":{\"email\":{},\"length\":{\"max\":255}},\"required\":{\"roles\":[\"user\"]},\"permissions\":{\"view\":[\"admin\",\"user\"],\"edit\":[\"admin\",\"user\"]},\"multivalued\":false},{\"name\":\"firstName\",\"displayName\":\"${firstName}\",\"validations\":{\"length\":{\"max\":255},\"person-name-prohibited-characters\":{}},\"required\":{\"roles\":[\"user\"]},\"permissions\":{\"view\":[\"admin\",\"user\"],\"edit\":[\"admin\",\"user\"]},\"multivalued\":false},{\"name\":\"lastName\",\"displayName\":\"${lastName}\",\"validations\":{\"length\":{\"max\":255},\"person-name-prohibited-characters\":{}},\"required\":{\"roles\":[\"user\"]},\"permissions\":{\"view\":[\"admin\",\"user\"],\"edit\":[\"admin\",\"user\"]},\"multivalued\":false}],\"groups\":[{\"name\":\"user-metadata\",\"displayHeader\":\"User metadata\",\"displayDescription\":\"Attributes, which refer to user metadata\"}],\"unmanagedAttributePolicy\":\"ENABLED\"}" ]
       }
     } ],
     "org.keycloak.keys.KeyProvider" : [ {

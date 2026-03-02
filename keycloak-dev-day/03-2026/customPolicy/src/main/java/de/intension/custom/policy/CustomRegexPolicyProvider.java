@@ -11,6 +11,7 @@ import org.keycloak.representations.idm.authorization.RegexPolicyRepresentation;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.BiFunction;
 
 public class CustomRegexPolicyProvider extends RegexPolicyProvider {
@@ -23,25 +24,8 @@ public class CustomRegexPolicyProvider extends RegexPolicyProvider {
 
   @Override
   public void evaluate(Evaluation evaluation) {
-    logger.info("Calling my own super duper policy");
-    logger.infof("User requestingIdentity: %s", evaluation.getContext().getIdentity().getId());
-    logger.infof("User requestingIdentity attributes: %s", evaluation.getContext().getIdentity().getAttributes());
-
-    var requester = evaluation.getContext().getIdentity();
-    var actualId = "278fbd99-e68b-4796-ac6e-bd4c0896e2c7";
-    logger.infof("Comparing requester: %s with actual allowed ID: %s", requester.getId(), actualId);
-//    if (requester.getId().equals(actualId)) {
-//      evaluation.grant();
-//      logger.info("Granting access");
-//    } else {
-//      evaluation.deny();
-//      logger.info("Denying access");
-//    }
-
-
-    var requestingIdentity = evaluation.getContext().getIdentity(); // This is the requester (e.g., Sophia)
     var permission = evaluation.getPermission();
-    var accessedResource = permission.getResource(); // This is the accessedResource being accessed (e.g., Adelheit's User Resource)
+    var accessedResource = permission.getResource();
 
     var authz = evaluation.getAuthorizationProvider();
     var session = authz.getKeycloakSession();
@@ -65,6 +49,7 @@ public class CustomRegexPolicyProvider extends RegexPolicyProvider {
       logger.infof("Target User does not have attribute: '%s', Denying access", ALLOW_IMPERSONATION_BY_KEY);
       return;
     }
+    // get all allowed impersonators
     String requesterEmail = session.users().getUserById(realm, evaluation.getContext().getIdentity().getId()).getEmail();
     List<Impersonator> allowedImpersonators =
         targetUser.getAttributes().get(ALLOW_IMPERSONATION_BY_KEY)

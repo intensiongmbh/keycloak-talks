@@ -17,7 +17,7 @@
 
     <version.intension-common>2.8.0</version.intension-common>
     <!-- NEVER, I repeat: NEVER changes this pattern, as this will break the CI    -->
-    <version.keycloak>26.2.5</version.keycloak>
+    <version.keycloak>26.5.4</version.keycloak>
     <version.lombok>1.18.38</version.lombok>
     <version.maven.properties>1.2.1</version.maven.properties>
     <version.maven.compiler>3.14.0</version.maven.compiler>
@@ -146,6 +146,15 @@
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-compiler-plugin</artifactId>
           <version>3.12.1</version>
+          <configuration>
+            <annotationProcessorPaths>
+              <path>
+                <groupId>com.google.auto.service</groupId>
+                <artifactId>auto-service</artifactId>
+                <version>${version.auto-service}</version>
+              </path>
+            </annotationProcessorPaths>
+          </configuration>
         </plugin>
       </plugins>
     </pluginManagement>
