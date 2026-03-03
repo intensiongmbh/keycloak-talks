@@ -1026,22 +1026,10 @@
         "logic" : "POSITIVE",
         "decisionStrategy" : "UNANIMOUS",
         "config" : {
-          "defaultResourceType" : "Users",
-          "resources" : "[\"Users\"]",
-          "scopes" : "[\"view\",\"impersonate\"]",
-          "applyPolicies" : "[\"Custom Regex Policy\"]"
-        }
-      }, {
-        "name" : "support",
-        "description" : "",
-        "type" : "scope",
-        "logic" : "POSITIVE",
-        "decisionStrategy" : "UNANIMOUS",
-        "config" : {
           "defaultResourceType" : "Groups",
           "resources" : "[\"16ea5c5c-6d0a-4dbf-9f8e-1d45cad0ef82\"]",
-          "scopes" : "[\"view-members\"]",
-          "applyPolicies" : "[\"support-team\"]"
+          "scopes" : "[\"view-members\",\"impersonate-members\"]",
+          "applyPolicies" : "[\"Custom Regex Policy\"]"
         }
       } ],
       "scopes" : [ {
@@ -1078,29 +1066,29 @@
       "decisionStrategy" : "UNANIMOUS",
       "authorizationSchema" : {
         "resourceTypes" : {
-          "Groups" : {
-            "type" : "Groups",
-            "scopes" : [ "manage-membership", "view", "manage", "impersonate-members", "view-members", "manage-members" ],
+          "Clients" : {
+            "type" : "Clients",
+            "scopes" : [ "map-roles-composite", "manage", "map-roles", "map-roles-client-scope", "view" ],
             "scopeAliases" : { }
           },
           "Users" : {
             "type" : "Users",
-            "scopes" : [ "view", "reset-password", "manage-group-membership", "manage", "map-roles", "impersonate" ],
+            "scopes" : [ "map-roles", "manage", "manage-group-membership", "reset-password", "view", "impersonate" ],
             "scopeAliases" : {
-              "manage" : [ "manage-members" ],
               "view" : [ "view-members" ],
+              "manage" : [ "manage-members" ],
               "impersonate" : [ "impersonate-members" ]
             },
             "groupType" : "Groups"
           },
-          "Clients" : {
-            "type" : "Clients",
-            "scopes" : [ "view", "map-roles-client-scope", "map-roles", "manage", "map-roles-composite" ],
+          "Groups" : {
+            "type" : "Groups",
+            "scopes" : [ "manage", "view", "manage-membership", "manage-members", "view-members", "impersonate-members" ],
             "scopeAliases" : { }
           },
           "Roles" : {
             "type" : "Roles",
-            "scopes" : [ "map-role-composite", "map-role-client-scope", "map-role" ],
+            "scopes" : [ "map-role-client-scope", "map-role-composite", "map-role" ],
             "scopeAliases" : { }
           }
         }
