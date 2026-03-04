@@ -1,0 +1,2 @@
+de.intension.easycloak.eventlistener.GroupBasedDelegationEventListenerFactory
+de.intension.easycloak.eventlistener.ManagerGroupMembershipPropagationEventListenerFactory
